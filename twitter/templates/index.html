@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Poor Man's Twitter</title>
+  <meta name=”viewport” content="width=device-width, initial-scale=1.0">
+  <meta name=”description” content="Poor man's Twitter">
+  <meta name=”keywords” content="vuejs, django, restapi">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div id="vueStart">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-2 col-lg-offset-2 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            Poor Man's Twitter
+          </div>
+          <form v-on:submit.prevent="addTweet()">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="col">
+                  <label for="name">Name</label>
+                  <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      placeholder="Enter your name"
+                      v-model="newTweet.name"
+                      required="required"
+                      maxlength="25">
+                </div>
+                <div class="col"><label for="message">Tweet</label>
+                  <input
+                      class="form-control"
+                      id="message"
+                      placeholder="Enter your tweet"
+                      v-model="newTweet.message"
+                      required="required"
+                      maxlength="50"></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Publish</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+          <tr>
+            <th @click="sort('timestamp')">Timestamp</th>
+            <th @click="sort('name')">user</th>
+            <th scope="col">message</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="tweet in sortedTweets">
+            <th>${tweet.timestamp}</th>
+            <td>${tweet.name}</td>
+            <td>${tweet.message}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" 
+  integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+</script>
+<script src="{% static 'twitter/js/twitter.js' %}"></script>
+</body>
+</html>
